@@ -13,21 +13,22 @@ class PatientSeeder extends Seeder
     public function run(): void
     {
         // Get user IDs for linking
-        $johnUser = \App\Models\User::where('email', 'john.doe@company.com')->first();
-        $janeUser = \App\Models\User::where('email', 'jane.smith@company.com')->first();
-        $ahmadUser = \App\Models\User::where('email', 'ahmad.wijaya@company.com')->first();
-        $sitiUser = \App\Models\User::where('email', 'siti.nurhaliza@company.com')->first();
-        $budiUser = \App\Models\User::where('email', 'budi.santoso@company.com')->first();
+        $johnUser = \App\Models\User::where('email', 'user@a.com')->first();
+        $janeUser = \App\Models\User::where('email', 'siti.nurhaliza@company.com')->first();
+        $ahmadUser = \App\Models\User::where('email', 'budi.santoso@company.com')->first();
+        $sitiUser = \App\Models\User::where('email', 'dewi.lestari@company.com')->first();
+        $budiUser = \App\Models\User::where('email', 'rizky.pratama@company.com')->first();
 
         $patients = [
             [
                 'user_id' => $johnUser->id,
                 'share_id' => 'MCU001',
-                'name' => 'John Doe',
+                'name' => 'Salman Alfarisi',
+                'jenis_kelamin' => 'L',
                 'tanggal_lahir' => '1985-03-15',
                 'umur' => 39,
                 'departemen' => 'IT',
-                'jabatan' => 'Software Developer',
+                'jabatan' => 'Web Developer',
                 'riwayat_kebiasaan_hidup' => 'Sering begadang, jarang olahraga',
                 'merokok' => true,
                 'minum_alkohol' => false,
@@ -37,6 +38,7 @@ class PatientSeeder extends Seeder
                 'user_id' => $janeUser->id,
                 'share_id' => 'MCU002',
                 'name' => 'Jane Smith',
+                'jenis_kelamin' => 'P',
                 'tanggal_lahir' => '1990-07-22',
                 'umur' => 34,
                 'departemen' => 'HR',
@@ -50,6 +52,7 @@ class PatientSeeder extends Seeder
                 'user_id' => $ahmadUser->id,
                 'share_id' => 'MCU003',
                 'name' => 'Ahmad Wijaya',
+                'jenis_kelamin' => 'L',
                 'tanggal_lahir' => '1982-11-08',
                 'umur' => 42,
                 'departemen' => 'Finance',
@@ -63,6 +66,7 @@ class PatientSeeder extends Seeder
                 'user_id' => $sitiUser->id,
                 'share_id' => 'MCU004',
                 'name' => 'Siti Nurhaliza',
+                'jenis_kelamin' => 'P',
                 'tanggal_lahir' => '1988-05-12',
                 'umur' => 36,
                 'departemen' => 'Marketing',
@@ -76,6 +80,7 @@ class PatientSeeder extends Seeder
                 'user_id' => $budiUser->id,
                 'share_id' => 'MCU005',
                 'name' => 'Budi Santoso',
+                'jenis_kelamin' => 'L',
                 'tanggal_lahir' => '1975-12-03',
                 'umur' => 49,
                 'departemen' => 'Operations',

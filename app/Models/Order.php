@@ -95,4 +95,9 @@ class Order extends Model
     {
         return $this->hasOne(TesFisik::class);
     }
+
+    public function riwayatKebiasaanHidup()
+    {
+        return $this->hasOne(RiwayatKebiasaanHidup::class);
+    }
 }

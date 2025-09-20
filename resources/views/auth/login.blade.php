@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - MCU System</title>
+    <title>Login - Aino Medical System</title>
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gradient-to-br from-primary-50 to-secondary-50 min-h-screen flex items-center justify-center">
     <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-primary-700">MCU System</h1>
-            <p class="text-accent-600 mt-2">Medical Check-Up Management</p>
+            <div class="flex items-center justify-center mb-4">
+                <x-logo variant="default" size="lg" />
+            </div>
         </div>
 
         <form method="POST" action="/login" class="space-y-6">
@@ -41,13 +42,13 @@
             </button>
         </form>
 
-        <div class="mt-8 p-4 bg-accent-50 rounded-lg">
+        {{-- <div class="mt-8 p-4 bg-accent-50 rounded-lg">
             <p class="text-sm text-accent-600 font-medium mb-2">Demo Accounts:</p>
             <div class="space-y-1 text-xs text-accent-500">
                 <p><strong>Admin:</strong> admin@mcu.com / password</p>
                 <p><strong>User:</strong> john@example.com / password</p>
             </div>
-        </div>
+        </div> --}}
     </div>
 </body>
 </html>

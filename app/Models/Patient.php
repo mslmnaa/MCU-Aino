@@ -13,6 +13,7 @@ class Patient extends Model
         'user_id',
         'share_id',
         'name',
+        'jenis_kelamin',
         'tanggal_lahir',
         'umur',
         'departemen',
@@ -21,6 +22,7 @@ class Patient extends Model
         'merokok',
         'minum_alkohol',
         'olahraga',
+        'profile_photo',
     ];
 
     protected $casts = [

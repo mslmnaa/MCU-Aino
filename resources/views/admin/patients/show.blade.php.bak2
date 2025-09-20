@@ -89,15 +89,9 @@
                 <h2 class="text-xl font-semibold text-primary-700">Medical Check-Up Report</h2>
                 <p class="text-neutral-600 mt-1">{{ $order->tgl_order->format('d F Y') }} • Lab No: {{ $order->no_lab }} • {{ $order->cabang }}</p>
             </div>
-            <div class="flex space-x-3">
-                <a href="{{ route('medical-records.edit', [$patient->id, $order->id]) }}"
-                   class="bg-secondary-500 hover:bg-secondary-600 text-white px-4 py-2 text-sm font-medium rounded-lg transition-colors">
-                    Edit Record
-                </a>
-                <span class="bg-primary-100 text-primary-800 px-4 py-2 text-sm font-medium rounded-full">
-                    Complete
-                </span>
-            </div>
+            <span class="bg-primary-100 text-primary-800 px-4 py-2 text-sm font-medium rounded-full">
+                Complete
+            </span>
         </div>
     </div>
     <div class="p-6">
@@ -236,30 +230,60 @@
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('%', '', $order->labHematologi->hematokrit) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">37-48%</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('%', '', $order->labHematologi->hematokrit) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">%</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">MCV</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace(' fL', '', $order->labHematologi->mcv) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">fL</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">82-98 fL</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace(' fL', '', $order->labHematologi->mcv) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">fL</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">MCH</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace(' pg', '', $order->labHematologi->mch) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">pg</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">27-31 pg</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace(' pg', '', $order->labHematologi->mch) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">pg</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">MCHC</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace(' g/dL', '', $order->labHematologi->mchc) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">g/dL</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">32-36 g/dL</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace(' g/dL', '', $order->labHematologi->mchc) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">g/dL</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">RDW</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('%', '', $order->labHematologi->rdw) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">11.5-14.5%</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('%', '', $order->labHematologi->rdw) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">%</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">Sel Darah Putih (Leukosit)</td>
@@ -272,48 +296,96 @@
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('%', '', $order->labHematologi->eosinofil) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">1-3%</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('%', '', $order->labHematologi->eosinofil) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">%</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">Basofil</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('%', '', $order->labHematologi->basofil) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">0-1%</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('%', '', $order->labHematologi->basofil) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">%</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">Neutrofil Batang</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('%', '', $order->labHematologi->neutrofil_batang) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">2-6%</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('%', '', $order->labHematologi->neutrofil_batang) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">%</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">Neutrofil Segmen</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('%', '', $order->labHematologi->neutrofil_segmen) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">50-70%</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('%', '', $order->labHematologi->neutrofil_segmen) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">%</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">Limfosit</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('%', '', $order->labHematologi->limfosit) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">20-40%</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('%', '', $order->labHematologi->limfosit) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">%</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">Monosit</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('%', '', $order->labHematologi->monosit) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">2-8%</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('%', '', $order->labHematologi->monosit) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">%</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">Trombosit</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace('/μL', '', $order->labHematologi->trombosit) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">/μL</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">150.000-450.000/μL</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace('/μL', '', $order->labHematologi->trombosit) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">/μL</span>
+                                </div>
+                            </td>
                         </tr>
                         <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                             <td class="px-6 py-4 text-sm text-neutral-700">Laju Endap Darah</td>
                             <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace(' mm/jam', '', $order->labHematologi->laju_endap_darah) ?? 'T/A' }}</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">mm/jam</td>
                             <td class="px-6 py-4 text-sm text-neutral-600">0-15 mm/jam</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                <div class="flex items-baseline space-x-2">
+                                    <span>{{ str_replace(' mm/jam', '', $order->labHematologi->laju_endap_darah) ?? 'T/A' }}</span>
+                                    <span class="text-xs text-neutral-500">mm/jam</span>
+                                </div>
+                            </td>
                         </tr>
                             @endif
 
@@ -397,12 +469,24 @@
                                 <td class="px-6 py-4 text-sm font-semibold text-neutral-700">{{ $order->labUrine->eritrosit_sedimen ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">/LPB</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">0-3/LPB</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-neutral-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ $order->labUrine->eritrosit_sedimen ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">/LPB</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-neutral-50 hover:bg-neutral-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">Lekosit Sedimen</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-neutral-700">{{ $order->labUrine->lekosit_sedimen ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">/LPB</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">0-5/LPB</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-neutral-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ $order->labUrine->lekosit_sedimen ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">/LPB</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-neutral-50 hover:bg-neutral-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">Epitel Sedimen</td>
@@ -439,12 +523,24 @@
                                 <td class="px-6 py-4 text-sm font-semibold text-primary-700">{{ str_replace(' U/L', '', $order->labFungsiLiver->sgot) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">U/L</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">10-40 U/L</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-primary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' U/L', '', $order->labFungsiLiver->sgot) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">U/L</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-primary-50 hover:bg-primary-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">SGPT</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-primary-700">{{ str_replace(' U/L', '', $order->labFungsiLiver->sgpt) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">U/L</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">7-56 U/L</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-primary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' U/L', '', $order->labFungsiLiver->sgpt) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">U/L</span>
+                                    </div>
+                                </td>
                             </tr>
                             @endif
 
@@ -456,24 +552,48 @@
                                 <td class="px-6 py-4 text-sm font-semibold text-secondary-700">{{ str_replace(' mg/dL', '', $order->labProfilLemak->cholesterol) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">< 200 mg/dL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-secondary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labProfilLemak->cholesterol) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-secondary-50 hover:bg-secondary-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">Trigliserida</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-secondary-700">{{ str_replace(' mg/dL', '', $order->labProfilLemak->trigliserida) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">< 150 mg/dL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-secondary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labProfilLemak->trigliserida) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-secondary-50 hover:bg-secondary-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">Kolesterol HDL</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-secondary-700">{{ str_replace(' mg/dL', '', $order->labProfilLemak->hdl_cholesterol) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">> 40 mg/dL (P), > 50 mg/dL (W)</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-secondary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labProfilLemak->hdl_cholesterol) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-secondary-50 hover:bg-secondary-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">Kolesterol LDL</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-secondary-700">{{ str_replace(' mg/dL', '', $order->labProfilLemak->ldl_cholesterol) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">< 100 mg/dL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-secondary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labProfilLemak->ldl_cholesterol) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             @endif
 
@@ -485,18 +605,36 @@
                                 <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace(' mg/dL', '', $order->labFungsiGinjal->ureum) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">10-50 mg/dL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labFungsiGinjal->ureum) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">Kreatinin</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace(' mg/dL', '', $order->labFungsiGinjal->creatinin) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">0.6-1.2 mg/dL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labFungsiGinjal->creatinin) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-cream-50 hover:bg-cream-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">Asam Urat</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-cream-700">{{ str_replace(' mg/dL', '', $order->labFungsiGinjal->asam_urat) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">3.5-7.2 mg/dL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-cream-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labFungsiGinjal->asam_urat) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             @endif
 
@@ -508,18 +646,36 @@
                                 <td class="px-6 py-4 text-sm font-semibold text-primary-700">{{ str_replace(' mg/dL', '', $order->labGlukosaDarah->glukosa_puasa) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">70-100 mg/dL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-primary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labGlukosaDarah->glukosa_puasa) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-primary-50 hover:bg-primary-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">Glukosa 2 Jam PP</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-primary-700">{{ str_replace(' mg/dL', '', $order->labGlukosaDarah->glukosa_2jam_pp) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">mg/dL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">< 140 mg/dL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-primary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' mg/dL', '', $order->labGlukosaDarah->glukosa_2jam_pp) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">mg/dL</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="bg-primary-50 hover:bg-primary-100 transition-colors">
                                 <td class="px-6 py-4 text-sm text-neutral-700">HbA1c</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-primary-700">{{ str_replace('%', '', $order->labGlukosaDarah->hba1c) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">%</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">< 5.7%</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-primary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace('%', '', $order->labGlukosaDarah->hba1c) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">%</span>
+                                    </div>
+                                </td>
                             </tr>
                             @endif
 
@@ -537,6 +693,12 @@
                                 <td class="px-6 py-4 text-sm font-semibold text-secondary-700">{{ str_replace(' ng/mL', '', $order->labPenandaTumor->cea) ?? 'T/A' }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">ng/mL</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600">< 3.0 ng/mL</td>
+                                <td class="px-6 py-4 text-sm font-semibold text-secondary-700">
+                                    <div class="flex items-baseline space-x-2">
+                                        <span>{{ str_replace(' ng/mL', '', $order->labPenandaTumor->cea) ?? 'T/A' }}</span>
+                                        <span class="text-xs text-neutral-500">ng/mL</span>
+                                    </div>
+                                </td>
                             </tr>
                             @endif
 

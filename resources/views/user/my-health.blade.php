@@ -1,11 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.user')
+
+@section('page-title', 'My Health Records')
+@section('page-subtitle', 'Access your personal health information and medical check-up results')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-primary-700">My Health</h1>
-        <p class="text-accent-600 mt-2">Access your health information</p>
-    </div>
+<div class="max-w-4xl mx-auto">
 
     <div class="bg-white rounded-xl shadow-lg p-8">
         <div class="text-center">

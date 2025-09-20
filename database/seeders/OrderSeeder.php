@@ -34,22 +34,22 @@ class OrderSeeder extends Seeder
             \App\Models\LabHematologi::create([
                 'order_id' => $order->id,
                 'hematologi' => 'Complete Blood Count',
-                'hemoglobin' => rand(120, 160) / 10 . ' g/dL',
-                'erytrosit' => rand(40, 55) / 10 . ' million/μL',
-                'hematokrit' => rand(36, 48) . '%',
-                'mcv' => rand(82, 98) . ' fL',
-                'mch' => rand(27, 32) . ' pg',
-                'mchc' => rand(32, 36) . ' g/dL',
-                'rdw' => rand(115, 145) / 10 . '%',
-                'leukosit' => rand(4000, 11000) . '/μL',
-                'eosinofil' => rand(1, 4) . '%',
-                'basofil' => rand(0, 1) . '%',
-                'neutrofil_batang' => rand(2, 6) . '%',
-                'neutrofil_segmen' => rand(50, 70) . '%',
-                'limfosit' => rand(20, 40) . '%',
-                'monosit' => rand(2, 8) . '%',
-                'trombosit' => rand(150000, 450000) . '/μL',
-                'laju_endap_darah' => rand(5, 20) . ' mm/jam',
+                'hemoglobin' => rand(120, 160) / 10,
+                'erytrosit' => rand(40, 55) / 10,
+                'hematokrit' => rand(36, 48),
+                'mcv' => rand(82, 98),
+                'mch' => rand(27, 32),
+                'mchc' => rand(32, 36),
+                'rdw' => rand(115, 145) / 10,
+                'leukosit' => rand(4000, 11000),
+                'eosinofil' => rand(1, 4),
+                'basofil' => rand(0, 1),
+                'neutrofil_batang' => rand(2, 6),
+                'neutrofil_segmen' => rand(50, 70),
+                'limfosit' => rand(20, 40),
+                'monosit' => rand(2, 8),
+                'trombosit' => rand(150000, 450000),
+                'laju_endap_darah' => rand(5, 20),
             ]);
 
             \App\Models\LabUrine::create([
@@ -102,9 +102,9 @@ class OrderSeeder extends Seeder
 
             \App\Models\PemeriksaanVital::create([
                 'order_id' => $order->id,
-                'berat_badan' => rand(50, 90) . ' kg',
-                'tinggi_badan' => rand(155, 180) . ' cm',
-                'lingkar_perut' => rand(70, 100) . ' cm',
+                'berat_badan' => rand(50, 90),
+                'tinggi_badan' => rand(155, 180),
+                'lingkar_perut' => rand(70, 100),
                 'bmi' => rand(18, 30) . '.'. rand(1, 9),
                 'klasifikasi_tekanan_darah' => 'Normal',
                 'klasifikasi_od' => 'Normal',
@@ -118,10 +118,10 @@ class OrderSeeder extends Seeder
 
             \App\Models\TandaVital::create([
                 'order_id' => $order->id,
-                'tekanan_darah' => rand(110, 130) . '/' . rand(70, 85) . ' mmHg',
-                'nadi' => rand(60, 100) . ' x/menit',
-                'pernapasan' => rand(16, 20) . ' x/menit',
-                'suhu_tubuh' => '36.' . rand(2, 8) . ' °C',
+                'tekanan_darah' => rand(110, 130) . '/' . rand(70, 85),
+                'nadi' => rand(60, 100),
+                'pernapasan' => rand(16, 20),
+                'suhu_tubuh' => '36.' . rand(2, 8),
             ]);
 
             // Adjust liver function based on drinking and age
@@ -130,8 +130,8 @@ class OrderSeeder extends Seeder
 
             \App\Models\LabFungsiLiver::create([
                 'order_id' => $order->id,
-                'sgot' => $sgotBase . ' U/L',
-                'sgpt' => $sgptBase . ' U/L',
+                'sgot' => $sgotBase,
+                'sgpt' => $sgptBase,
             ]);
 
             // Adjust lipid profile based on lifestyle
@@ -141,30 +141,30 @@ class OrderSeeder extends Seeder
 
             \App\Models\LabProfilLemak::create([
                 'order_id' => $order->id,
-                'cholesterol' => $cholesterolBase . ' mg/dL',
-                'hdl_cholesterol' => $hdlBase . ' mg/dL',
-                'ldl_cholesterol' => rand(70, 160) . ' mg/dL',
-                'trigliserida' => $triglyceridaBase . ' mg/dL',
+                'cholesterol' => $cholesterolBase,
+                'hdl_cholesterol' => $hdlBase,
+                'ldl_cholesterol' => rand(70, 160),
+                'trigliserida' => $triglyceridaBase,
             ]);
 
             \App\Models\LabFungsiGinjal::create([
                 'order_id' => $order->id,
-                'ureum' => rand(15, 45) . ' mg/dL',
-                'creatinin' => '0.' . rand(6, 12) . ' mg/dL',
-                'asam_urat' => rand(3, 7) . '.' . rand(1, 9) . ' mg/dL',
+                'ureum' => rand(15, 45),
+                'creatinin' => '0.' . rand(6, 12),
+                'asam_urat' => rand(3, 7) . '.' . rand(1, 9),
             ]);
 
             \App\Models\LabGlukosaDarah::create([
                 'order_id' => $order->id,
-                'glukosa_puasa' => rand(70, 110) . ' mg/dL',
-                'glukosa_2jam_pp' => rand(70, 140) . ' mg/dL',
-                'hba1c' => rand(4, 6) . '.' . rand(1, 9) . '%',
+                'glukosa_puasa' => rand(70, 110),
+                'glukosa_2jam_pp' => rand(70, 140),
+                'hba1c' => rand(4, 6) . '.' . rand(1, 9),
             ]);
 
             \App\Models\LabPenandaTumor::create([
                 'order_id' => $order->id,
                 'hbsag' => 'Non Reaktif',
-                'cea' => rand(1, 5) . '.' . rand(1, 9) . ' ng/mL',
+                'cea' => rand(1, 5) . '.' . rand(1, 9),
             ]);
 
             \App\Models\Radiologi::create([
