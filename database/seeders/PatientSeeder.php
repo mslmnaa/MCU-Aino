@@ -14,10 +14,10 @@ class PatientSeeder extends Seeder
     {
         // Get user IDs for linking
         $johnUser = \App\Models\User::where('email', 'user@a.com')->first();
-        $janeUser = \App\Models\User::where('email', 'siti.nurhaliza@company.com')->first();
-        $ahmadUser = \App\Models\User::where('email', 'budi.santoso@company.com')->first();
-        $sitiUser = \App\Models\User::where('email', 'dewi.lestari@company.com')->first();
-        $budiUser = \App\Models\User::where('email', 'rizky.pratama@company.com')->first();
+        $janeUser = \App\Models\User::where('email', 'siti.nurhaliza @ainosi.co.id')->first();
+        $ahmadUser = \App\Models\User::where('email', 'budi.santoso@ainosi.co.id')->first();
+        $sitiUser = \App\Models\User::where('email', 'dewi.lestari@ainosi.co.id')->first();
+        $budiUser = \App\Models\User::where('email', 'rizky.pratama@ainosi.co.id')->first();
 
         $patients = [
             [

@@ -14,25 +14,20 @@ class UserSeeder extends Seeder
         // Admin accounts
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@mcu.com',
+            'email' => 'admin@ainosi.co.id',
             'password' => Hash::make('123'),
             'role' => 'admin',
         ]);
 
-        User::create([
-            'name' => 'Dr. Maria Sari',
-            'email' => 'maria@mcu.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
+    
 
         // Employee user accounts
         $employees = [
     ['name' => 'Muhammad Salman Alfarisi', 'email' => 'user@a.com'],
-    ['name' => 'Siti Nurhaliza', 'email' => 'siti.nurhaliza@company.com'],
-    ['name' => 'Budi Santoso', 'email' => 'budi.santoso@company.com'],
-    ['name' => 'Dewi Lestari', 'email' => 'dewi.lestari@company.com'],
-    ['name' => 'Rizky Pratama', 'email' => 'rizky.pratama@company.com'],
+    ['name' => 'Siti Nurhaliza', 'email' => 'siti.nurhaliza @ainosi.co.id'],
+    ['name' => 'Budi Santoso', 'email' => 'budi.santoso@ainosi.co.id'],
+    ['name' => 'Dewi Lestari', 'email' => 'dewi.lestari@ainosi.co.id'],
+    ['name' => 'Rizky Pratama', 'email' => 'rizky.pratama@ainosi.co.id'],
 ];
 
 
