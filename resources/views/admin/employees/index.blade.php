@@ -22,8 +22,90 @@
 @endif
 
 <div class="bg-white border border-neutral-200 rounded-xl shadow-lg overflow-hidden">
-    
-    <div class="overflow-x-auto">
+    <!-- Mobile View -->
+    <div class="block lg:hidden">
+        @foreach($patients as $patient)
+        <div class="border-b border-neutral-200 p-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0">
+                        @if($patient->profile_photo || $patient->user?->profile_photo)
+                            <img src="{{ asset('storage/' . ($patient->profile_photo ?? $patient->user->profile_photo)) }}"
+                                 alt="{{ $patient->name }}"
+                                 class="h-12 w-12 rounded-full object-cover border-2 border-primary-300 shadow-sm">
+                        @else
+                            <div class="h-12 w-12 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center border-2 border-primary-300 shadow-sm">
+                                <span class="text-white text-sm font-bold">
+                                    {{ strtoupper(substr($patient->name, 0, 2)) }}
+                                </span>
+                            </div>
+                        @endif
+                    </div>
+                    <div>
+                        <div class="text-base font-medium text-neutral-900">{{ $patient->name }}</div>
+                        <div class="text-sm text-primary-600">{{ $patient->jabatan }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                <div>
+                    <span class="text-neutral-500">Department:</span>
+                    <p class="font-medium text-neutral-700">{{ $patient->departemen }}</p>
+                </div>
+                <div>
+                    <span class="text-neutral-500">Account:</span>
+                    <p class="text-neutral-700">{{ $patient->user?->email ?? 'No account' }}</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+                <!-- View Medical Records -->
+                <a href="{{ route('patients.show', $patient) }}"
+                   class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md text-primary-600 bg-primary-50 hover:bg-primary-100 transition-colors border border-primary-200"
+                   title="View Medical Records">
+                    <svg class="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Medical
+                </a>
+
+                @if($patient->user)
+                <!-- Edit Employee (Combined) -->
+                <a href="{{ route('users.edit', $patient->user->id) }}"
+                   class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors border border-blue-200"
+                   title="Edit Employee">
+                    <svg class="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    Edit
+                </a>
+
+                <!-- Delete User -->
+                <form method="POST" action="{{ route('users.destroy', $patient->user->id) }}" class="inline-block delete-form" data-user-name="{{ $patient->name }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md text-red-600 bg-red-50 hover:bg-red-100 transition-colors border border-red-200 delete-btn"
+                            title="Delete Employee">
+                        <svg class="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Delete
+                    </button>
+                </form>
+                @else
+                <span class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-neutral-500 bg-neutral-100 rounded-md">
+                    No account linked
+                </span>
+                @endif
+            </div>
+        </div>
+        @endforeach
+    </div>
+
+    <!-- Desktop Table View -->
+    <div class="hidden lg:block overflow-x-auto">
         <table class="min-w-full divide-y divide-neutral-200">
             <thead class="bg-neutral-50">
                 <tr>
@@ -116,14 +198,15 @@
         </table>
     </div>
 
-    <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200">
+    <!-- Pagination for both mobile and desktop -->
+    <div class="px-4 lg:px-6 py-4 bg-neutral-50 border-t border-neutral-200">
         {{ $patients->links() }}
     </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
         <div class="mt-3 text-center">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                 <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

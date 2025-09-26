@@ -19,8 +19,18 @@
 
     @auth
     <div class="flex min-h-screen">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="fixed top-4 left-4 z-50 lg:hidden bg-primary-500 text-white p-2 rounded-lg shadow-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <!-- Mobile Overlay -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"></div>
+
         <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-primary-500 flex flex-col">
+        <aside id="sidebar" class="fixed lg:relative w-64 bg-primary-500 flex flex-col h-full z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
             <!-- Logo/Brand -->
             <div class="px-6 py-8 border-b border-primary-400">
                 <x-logo variant="light" size="md" />
@@ -129,10 +139,10 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 bg-neutral-50">
+        <main class="flex-1 bg-neutral-50 lg:ml-0">
             <!-- Page Header -->
-            <header class="bg-neutral-50 border-b border-cream-200 px-8 py-6">
-                <div class="flex items-center justify-between">
+            <header class="bg-neutral-50 border-b border-cream-200 px-4 lg:px-8 py-6">
+                <div class="flex items-center justify-between ml-0 lg:ml-0">
                     <div>
                 
                         <p class="text-sm text-neutral-500 mt-1">
@@ -146,7 +156,7 @@
             </header>
 
             <!-- Page Content -->
-            <div class="px-8 py-6">
+            <div class="px-4 lg:px-8 py-6">
                 @yield('content')
             </div>
         </main>
@@ -154,5 +164,34 @@
     @endauth
 
     @vite('resources/js/app.js')
+
+    <!-- Mobile Menu JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+
+            if (mobileMenuButton && sidebar && overlay) {
+                function toggleMobileMenu() {
+                    sidebar.classList.toggle('-translate-x-full');
+                    overlay.classList.toggle('hidden');
+                }
+
+                mobileMenuButton.addEventListener('click', toggleMobileMenu);
+                overlay.addEventListener('click', toggleMobileMenu);
+
+                // Close menu when clicking a link
+                const sidebarLinks = sidebar.querySelectorAll('a');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth < 1024) {
+                            toggleMobileMenu();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
