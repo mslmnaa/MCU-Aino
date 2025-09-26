@@ -18,7 +18,7 @@
             @csrf
 
             <div>
-                <label for="email" class="block text-sm font-medium text-accent-700 mb-2">Email</label>
+                <label for="email" class="block text-sm font-medium text-accent-700 mb-2">Emaill</label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}" required
                     class="w-full px-4 py-3 border border-accent-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                     placeholder="Enter your email">
