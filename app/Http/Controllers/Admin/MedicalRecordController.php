@@ -6,12 +6,22 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Patient;
+use App\Models\NormalValue;
 
 class MedicalRecordController extends Controller
 {
-    public function edit($patientId, $orderId)
+    public function edit(Request $request, $patientId, $orderId = null)
     {
         $patient = Patient::findOrFail($patientId);
+
+        // Support for MCU selection via query parameter
+        $selectedOrderId = $request->get('order_id', $orderId);
+
+        // If no specific order selected, use latest MCU
+        if (!$selectedOrderId && $patient->latest_mcu) {
+            $selectedOrderId = $patient->latest_mcu->id;
+        }
+
         $order = Order::with([
             'labHematologi',
             'labUrine',
@@ -28,7 +38,7 @@ class MedicalRecordController extends Controller
             'tesFisik',
             'statusGizi',
             'riwayatKebiasaanHidup'
-        ])->findOrFail($orderId);
+        ])->findOrFail($selectedOrderId);
 
         return view('admin.medical-records.edit', compact('patient', 'order'));
     }
@@ -54,11 +64,47 @@ class MedicalRecordController extends Controller
             'riwayatKebiasaanHidup'
         ])->findOrFail($orderId);
 
-        // Update lab results and medical data
+        // Helper function to add units back to values
+        $addUnits = function($data, $fieldUnits) {
+            foreach ($data as $field => $value) {
+                if ($value !== null && $value !== '' && isset($fieldUnits[$field])) {
+                    $unit = $fieldUnits[$field];
+                    if ($unit !== '-' && !empty($unit)) {
+                        // Only add unit if it's not already present
+                        if (!str_contains($value, $unit)) {
+                            $data[$field] = $value . ' ' . $unit;
+                        }
+                    }
+                }
+            }
+            return $data;
+        };
+
+        // Update lab results and medical data with proper units
         if ($request->has('hematologi')) {
+            $hematologiUnits = [
+                'hemoglobin' => 'g/dL',
+                'erytrosit' => 'juta/μL',
+                'hematokrit' => '%',
+                'mcv' => 'fL',
+                'mch' => 'pg',
+                'mchc' => 'g/dL',
+                'rdw' => '%',
+                'leukosit' => '/μL',
+                'eosinofil' => '%',
+                'basofil' => '%',
+                'neutrofil_batang' => '%',
+                'neutrofil_segmen' => '%',
+                'limfosit' => '%',
+                'monosit' => '%',
+                'trombosit' => '/μL',
+                'laju_endap_darah' => 'mm/jam'
+            ];
+
+            $hematologiData = $addUnits($request->hematologi, $hematologiUnits);
             $order->labHematologi()->updateOrCreate(
                 ['order_id' => $order->id],
-                $request->hematologi
+                $hematologiData
             );
         }
 
@@ -70,30 +116,58 @@ class MedicalRecordController extends Controller
         }
 
         if ($request->has('fungsi_liver')) {
+            $fungsiLiverUnits = [
+                'sgot' => 'U/L',
+                'sgpt' => 'U/L'
+            ];
+
+            $fungsiLiverData = $addUnits($request->fungsi_liver, $fungsiLiverUnits);
             $order->labFungsiLiver()->updateOrCreate(
                 ['order_id' => $order->id],
-                $request->fungsi_liver
+                $fungsiLiverData
             );
         }
 
         if ($request->has('profil_lemak')) {
+            $profilLemakUnits = [
+                'cholesterol' => 'mg/dL',
+                'trigliserida' => 'mg/dL',
+                'hdl_cholesterol' => 'mg/dL',
+                'ldl_cholesterol' => 'mg/dL'
+            ];
+
+            $profilLemakData = $addUnits($request->profil_lemak, $profilLemakUnits);
             $order->labProfilLemak()->updateOrCreate(
                 ['order_id' => $order->id],
-                $request->profil_lemak
+                $profilLemakData
             );
         }
 
         if ($request->has('fungsi_ginjal')) {
+            $fungsiGinjalUnits = [
+                'ureum' => 'mg/dL',
+                'creatinin' => 'mg/dL',
+                'asam_urat' => 'mg/dL'
+            ];
+
+            $fungsiGinjalData = $addUnits($request->fungsi_ginjal, $fungsiGinjalUnits);
             $order->labFungsiGinjal()->updateOrCreate(
                 ['order_id' => $order->id],
-                $request->fungsi_ginjal
+                $fungsiGinjalData
             );
         }
 
         if ($request->has('glukosa_darah')) {
+            $glukosaDarahUnits = [
+                'glukosa_puasa' => 'mg/dL',
+                'glukosa_2jam_pp' => 'mg/dL',
+                'hba1c' => '%'
+            ];
+
+            $glukosaDarahData = $addUnits($request->glukosa_darah, $glukosaDarahUnits);
             $order->labGlukosaDarah()->updateOrCreate(
                 ['order_id' => $order->id],
-                $request->glukosa_darah
+                $glukosaDarahData
             );
         }
 
@@ -105,16 +179,31 @@ class MedicalRecordController extends Controller
         }
 
         if ($request->has('tanda_vital')) {
+            $tandaVitalUnits = [
+                'tekanan_darah' => 'mmHg',
+                'nadi' => 'x/menit',
+                'pernapasan' => 'x/menit',
+                'suhu_tubuh' => '°C'
+            ];
+
+            $tandaVitalData = $addUnits($request->tanda_vital, $tandaVitalUnits);
             $order->tandaVital()->updateOrCreate(
                 ['order_id' => $order->id],
-                $request->tanda_vital
+                $tandaVitalData
             );
         }
 
         if ($request->has('pemeriksaan_vital')) {
+            $pemeriksaanVitalUnits = [
+                'berat_badan' => 'kg',
+                'tinggi_badan' => 'cm',
+                'lingkar_perut' => 'cm'
+            ];
+
+            $pemeriksaanVitalData = $addUnits($request->pemeriksaan_vital, $pemeriksaanVitalUnits);
             $order->pemeriksaanVital()->updateOrCreate(
                 ['order_id' => $order->id],
-                $request->pemeriksaan_vital
+                $pemeriksaanVitalData
             );
         }
 
@@ -125,8 +214,20 @@ class MedicalRecordController extends Controller
 
     public function normalValues()
     {
-        // Get all normal values from a config file or database
-        $normalValues = [
+        // Try to get from database first, if empty seed with default values
+        $normalValues = NormalValue::getValuesByCategory();
+
+        if ($normalValues->isEmpty()) {
+            $this->seedDefaultNormalValues();
+            $normalValues = NormalValue::getValuesByCategory();
+        }
+
+        return view('admin.normal-values.index', compact('normalValues'));
+    }
+
+    private function seedDefaultNormalValues()
+    {
+        $defaultValues = [
             'hematologi' => [
                 'hemoglobin' => '12-16 g/dL',
                 'erytrosit' => '4.2-5.4 juta/μL',
@@ -179,15 +280,52 @@ class MedicalRecordController extends Controller
             ]
         ];
 
-        return view('admin.medical-records.normal-values', compact('normalValues'));
+        foreach ($defaultValues as $category => $parameters) {
+            foreach ($parameters as $parameter => $value) {
+                NormalValue::create([
+                    'category' => $category,
+                    'parameter' => $parameter,
+                    'value' => $value
+                ]);
+            }
+        }
     }
 
     public function updateNormalValues(Request $request)
     {
-        // For now, we'll just return success
-        // In a real application, you might want to store these in a database table
-        return redirect()
-            ->route('admin.normal-values')
-            ->with('success', 'Normal values updated successfully');
+        try {
+            // Get all form data except _token and _method
+            $formData = $request->except(['_token', '_method']);
+
+            // Process each category
+            foreach ($formData as $category => $parameters) {
+                foreach ($parameters as $parameter => $value) {
+                    // Skip empty values
+                    if (empty(trim($value))) {
+                        continue;
+                    }
+
+                    // Update or create normal value
+                    NormalValue::updateOrCreate(
+                        [
+                            'category' => $category,
+                            'parameter' => $parameter
+                        ],
+                        [
+                            'value' => trim($value)
+                        ]
+                    );
+                }
+            }
+
+            return redirect()
+                ->route('admin.normal-values')
+                ->with('success', 'Normal values updated successfully');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.normal-values')
+                ->with('error', 'Failed to update normal values: ' . $e->getMessage());
+        }
     }
 }

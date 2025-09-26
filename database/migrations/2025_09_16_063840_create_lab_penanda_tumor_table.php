@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained();
             $table->string('hbsag')->nullable();
             $table->string('cea')->nullable();
+            // $table->text('kesimpulan_penanda_tumor')->nullable();
             $table->timestamps();
         });
     }

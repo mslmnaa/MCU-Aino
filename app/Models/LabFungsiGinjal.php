@@ -9,13 +9,14 @@ class LabFungsiGinjal extends Model
 {
     use HasFactory;
 
-    protected $table = 'lab_fungsi_ginjal';
+    protected $table = 'hasil_fungsi_ginjal';
 
     protected $fillable = [
         'order_id',
         'ureum',
         'creatinin',
         'asam_urat',
+        'kesimpulan_fungsi_ginjal',
     ];
 
     public function order()

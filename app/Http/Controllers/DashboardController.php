@@ -19,14 +19,14 @@ class DashboardController extends Controller
 
             return view('admin.dashboard', compact('totalPatients', 'totalOrders', 'recentOrders'));
         } else {
-            // For regular users, check if they have a patient record
+            // For regular users, redirect directly to their health results
             $patient = $user->patient;
+
             if ($patient) {
-                // User has patient data, redirect to their health results
                 return redirect()->route('my-health');
             } else {
-                // No patient data found
-                return view('user.dashboard')->with('error', 'No medical records found for your account. Please contact the administrator.');
+                // No patient data found, show error in my-health page
+                return redirect()->route('my-health')->with('error', 'No medical records found for your account. Please contact the administrator.');
             }
         }
     }

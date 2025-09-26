@@ -9,7 +9,7 @@ class LabProfilLemak extends Model
 {
     use HasFactory;
 
-    protected $table = 'lab_profil_lemak';
+    protected $table = 'hasil_profil_lemak';
 
     protected $fillable = [
         'order_id',
@@ -17,6 +17,7 @@ class LabProfilLemak extends Model
         'trigliserida',
         'hdl_cholesterol',
         'ldl_cholesterol',
+        'kesimpulan_profil_lemak',
     ];
 
     public function order()

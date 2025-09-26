@@ -47,7 +47,7 @@
 
     @if($showText)
         <div>
-            <h1 class="{{ $textSize }} font-serif font-bold
+            <h1 class="{{ $textSize }} font-sans font-bold
                        @if($variant === 'light') text-white
                        @elseif($variant === 'sidebar') text-primary-700
                        @elseif($variant === 'dark') text-neutral-900

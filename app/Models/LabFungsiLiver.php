@@ -9,12 +9,13 @@ class LabFungsiLiver extends Model
 {
     use HasFactory;
 
-    protected $table = 'lab_fungsi_liver';
+    protected $table = 'hasil_fungsi_hati';
 
     protected $fillable = [
         'order_id',
         'sgot',
         'sgpt',
+        'kesimpulan_fungsi_hati',
     ];
 
     public function order()

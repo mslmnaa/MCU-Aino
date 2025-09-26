@@ -9,13 +9,14 @@ class LabGlukosaDarah extends Model
 {
     use HasFactory;
 
-    protected $table = 'lab_glukosa_darah';
+    protected $table = 'hasil_glukosa';
 
     protected $fillable = [
         'order_id',
         'glukosa_puasa',
         'glukosa_2jam_pp',
         'hba1c',
+        'kesimpulan_glukosa',
     ];
 
     public function order()

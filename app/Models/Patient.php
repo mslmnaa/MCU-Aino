@@ -41,4 +41,34 @@ class Patient extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    // Get all MCU orders sorted by date (latest first)
+    public function getMcuOrdersAttribute()
+    {
+        return $this->orders()
+            ->orderBy('tgl_order', 'desc')
+            ->get();
+    }
+
+    // Get the latest/most recent MCU order
+    public function getLatestMcuAttribute()
+    {
+        return $this->orders()
+            ->orderBy('tgl_order', 'desc')
+            ->first();
+    }
+
+    // Check if patient has multiple MCUs
+    public function getHasMultipleMcusAttribute()
+    {
+        return $this->orders()->count() > 1;
+    }
+
+    // Get MCU orders grouped by year for easy navigation
+    public function getMcuOrdersByYearAttribute()
+    {
+        return $this->mcu_orders->groupBy(function($order) {
+            return $order->tgl_order->format('Y');
+        });
+    }
 }

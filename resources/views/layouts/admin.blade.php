@@ -3,11 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <title>@yield('title', 'Aino - Medical Check-Up System')</title> --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')
+    <style>
+        /* Prevent layout shift on page load by setting default states */
+        .admin-layout {
+            visibility: hidden;
+        }
+
+        .admin-layout.loaded {
+            visibility: visible;
+        }
+
+        /* Default sidebar state for desktop */
+        @media (min-width: 768px) {
+            .sidebar-default {
+                width: 16rem; /* w-64 */
+                transform: translateX(0);
+            }
+
+            .main-content-default {
+                margin-left: 16rem; /* ml-64 */
+            }
+        }
+
+        /* Default sidebar state for mobile */
+        @media (max-width: 767px) {
+            .sidebar-default {
+                width: 16rem; /* w-64 */
+                transform: translateX(-100%);
+            }
+
+            .main-content-default {
+                margin-left: 0;
+            }
+        }
+
+        /* Sidebar content default states */
+        @media (min-width: 768px) {
+            /* Show full content by default on desktop */
+            .logo-full {
+                display: block;
+            }
+
+            .logo-icon {
+                display: none;
+            }
+
+            .nav-text {
+                display: inline;
+                opacity: 1;
+            }
+
+            .user-info {
+                display: block;
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 767px) {
+            /* Hide text content by default on mobile */
+            .logo-full {
+                display: none;
+            }
+
+            .logo-icon {
+                display: flex;
+            }
+
+            .nav-text {
+                display: none;
+            }
+
+            .user-info {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body class="bg-cream-50 min-h-screen font-sans">
     @guest
@@ -18,7 +94,21 @@
     @endguest
 
     @auth
-    <div class="flex min-h-screen" x-data="{ sidebarOpen: window.innerWidth >= 768 }">
+    <div class="flex min-h-screen admin-layout"
+         x-data="{
+             sidebarOpen: window.innerWidth >= 768,
+             init() {
+                 // Handle window resize
+                 window.addEventListener('resize', () => {
+                     if (window.innerWidth >= 768) {
+                         this.sidebarOpen = true;
+                     } else {
+                         this.sidebarOpen = false;
+                     }
+                 });
+             }
+         }"
+         x-init="$nextTick(() => { $el.classList.add('loaded') })">
         <!-- Mobile Overlay -->
         <div x-show="sidebarOpen && window.innerWidth < 768"
              @click="sidebarOpen = false"
@@ -31,20 +121,19 @@
              class="fixed inset-0 bg-neutral-900 bg-opacity-50 z-40 md:hidden"></div>
 
         <!-- Sidebar Navigation -->
-        <aside class="fixed left-0 top-0 h-screen bg-white border-r border-neutral-200 shadow-sm flex flex-col z-50 transition-all duration-300"
+        <aside class="fixed left-0 top-0 h-screen bg-white border-r border-neutral-200 shadow-sm flex flex-col z-50 transition-all duration-300 sidebar-default"
                :class="{
                    'w-64': sidebarOpen,
                    'w-16': !sidebarOpen && window.innerWidth >= 768,
                    '-translate-x-full': !sidebarOpen && window.innerWidth < 768,
                    'translate-x-0': sidebarOpen || window.innerWidth >= 768
-               }"
-               x-init="$watch('innerWidth', value => { if (value < 768) sidebarOpen = false })">
+               }">
             <!-- Logo/Brand -->
             <div class="px-6 py-8 border-b border-neutral-200 flex items-center justify-between">
-                <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                <div x-show="sidebarOpen" class="logo-full">
                     <x-logo variant="sidebar" size="md" />
                 </div>
-                <div x-show="!sidebarOpen" class="w-full flex justify-center">
+                <div x-show="!sidebarOpen" class="w-full flex justify-center logo-icon">
                     <x-logo variant="sidebar" size="md" :showText="false" />
                 </div>
                 <!-- Toggle Button -->
@@ -68,7 +157,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 5l4-3 4 3"></path>
                             </svg>
-                            <span x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">Dashboard</span>
+                            <span x-show="sidebarOpen" class="nav-text">Dashboard</span>
                         </a>
                     </li>
 
@@ -81,7 +170,7 @@
                                 <svg class="w-5 h-5" :class="sidebarOpen ? 'mr-3' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                 </svg>
-                                <span x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">Employee</span>
+                                <span x-show="sidebarOpen" class="nav-text">Employees</span>
                             </a>
                         </li>
 
@@ -93,7 +182,19 @@
                                 <svg class="w-5 h-5" :class="sidebarOpen ? 'mr-3' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
-                                <span x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">Normal Values</span>
+                                <span x-show="sidebarOpen" class="nav-text">Normal Values</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('admin.import') }}"
+                               class="flex items-center py-3 text-neutral-600 hover:text-primary-700 hover:bg-primary-50 border-l-4 border-transparent hover:border-primary-300 transition-all duration-200 {{ request()->routeIs('admin.import*') ? 'bg-primary-50 text-primary-700 border-primary-300' : '' }}"
+                               :class="sidebarOpen ? 'px-4' : 'px-2 justify-center'"
+                               :title="!sidebarOpen ? 'Import Data MCU' : ''">
+                                <svg class="w-5 h-5" :class="sidebarOpen ? 'mr-3' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                                <span x-show="sidebarOpen" class="nav-text">Import Data</span>
                             </a>
                         </li>
 
@@ -106,7 +207,7 @@
                                 <svg class="w-5 h-5" :class="sidebarOpen ? 'mr-3' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                 </svg>
-                                <span x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">My Health Results</span>
+                                <span x-show="sidebarOpen" class="nav-text">My Health Results</span>
                             </a>
                         </li>
                     @endif
@@ -134,7 +235,7 @@
                             </svg>
                         </button>
                     </div>
-                    <div x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="ml-3">
+                    <div x-show="sidebarOpen" class="ml-3 user-info">
                         <p class="text-sm font-medium text-neutral-700">{{ auth()->user()->name }}</p>
                         <p class="text-xs text-neutral-500">{{ ucfirst(auth()->user()->role) }}</p>
                     </div>
@@ -154,14 +255,14 @@
                         <svg class="w-4 h-4" :class="sidebarOpen ? 'mr-3' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                         </svg>
-                        <span x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">Sign Out</span>
+                        <span x-show="sidebarOpen" class="nav-text">Sign Out</span>
                     </button>
                 </form>
             </div>
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 bg-neutral-50 transition-all duration-300"
+        <main class="flex-1 bg-neutral-50 transition-all duration-300 main-content-default"
               :class="{
                   'ml-64': sidebarOpen && window.innerWidth >= 768,
                   'ml-16': !sidebarOpen && window.innerWidth >= 768,
@@ -179,7 +280,7 @@
                             </svg>
                         </button>
                         <div>
-                            <h2 class="text-2xl font-serif font-semibold text-primary-700">
+                            <h2 class="text-2xl font-sans font-semibold text-primary-700">
                                 @yield('page-title', 'Dashboard')
                             </h2>
                             <p class="text-sm mt-1 font-semibold" style="color: #000000 !important; font-weight: 600 !important;">

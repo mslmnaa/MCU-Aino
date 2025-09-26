@@ -39,7 +39,15 @@
 
 <!-- Recent Activity -->
 <div class="mt-8">
-    <h3 class="text-lg font-semibold text-primary-700 mb-4">Recent Medical Check-ups</h3>
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-primary-700">Recent Medical Check-ups</h3>
+        <p class="text-sm text-neutral-500 flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+            </svg>
+            Click any row to view medical records
+        </p>
+    </div>
     <div class="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden">
         <div class="px-6 py-4 bg-neutral-50 border-b border-neutral-200">
             <div class="grid grid-cols-4 gap-4 text-sm font-semibold text-neutral-700 uppercase tracking-wide">
@@ -51,16 +59,18 @@
         </div>
         <div class="divide-y divide-neutral-200">
             @foreach($recentOrders as $order)
-            <div class="px-6 py-4 hover:bg-neutral-50 transition-colors duration-150">
+            <a href="{{ route('patients.show', $order->patient->id) }}"
+               class="block px-6 py-4 hover:bg-primary-50 transition-colors duration-150 cursor-pointer group"
+               title="View {{ $order->patient->name }}'s medical records ({{ $order->tgl_order->format('Y') }})">
                 <div class="grid grid-cols-4 gap-4 items-center">
                     <div class="flex items-center space-x-3">
                         <div class="flex-shrink-0">
                             @if($order->patient->profile_photo || $order->patient->user?->profile_photo)
                                 <img src="{{ asset('storage/' . ($order->patient->profile_photo ?? $order->patient->user->profile_photo)) }}"
                                      alt="{{ $order->patient->name }}"
-                                     class="h-10 w-10 rounded-full object-cover border-2 border-primary-200">
+                                     class="h-10 w-10 rounded-full object-cover border-2 border-primary-200 group-hover:border-primary-400 transition-colors">
                             @else
-                                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center border-2 border-primary-200">
+                                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center border-2 border-primary-200 group-hover:border-primary-400 transition-colors group-hover:shadow-md">
                                     <span class="text-white text-xs font-bold">
                                         {{ strtoupper(substr($order->patient->name, 0, 2)) }}
                                     </span>
@@ -68,16 +78,32 @@
                             @endif
                         </div>
                         <div>
-                            <p class="font-medium text-neutral-900">{{ $order->patient->name }}</p>
+                            <p class="font-medium text-neutral-900 group-hover:text-primary-700 transition-colors">{{ $order->patient->name }}</p>
                             <p class="text-sm text-neutral-500">{{ $order->patient->jabatan }}</p>
                         </div>
                     </div>
-                    <div class="text-sm text-neutral-600">{{ $order->patient->departemen }}</div>
-                    <div class="text-sm font-mono text-primary-600">{{ $order->no_lab }}</div>
-                    <div class="text-sm text-neutral-500">{{ $order->created_at->format('M d, Y') }}</div>
+                    <div class="text-sm text-neutral-600 group-hover:text-neutral-700 transition-colors">{{ $order->patient->departemen }}</div>
+                    <div class="text-sm font-mono text-primary-600 group-hover:text-primary-700 transition-colors">{{ $order->no_lab }}</div>
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-neutral-500 group-hover:text-neutral-600 transition-colors">{{ $order->tgl_order->format('M d, Y') }}</div>
+                        <svg class="w-4 h-4 text-neutral-400 group-hover:text-primary-600 transition-colors ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+            @endforeach
+
+            @if($recentOrders->isEmpty())
+            <div class="px-6 py-8 text-center">
+                <div class="text-neutral-500">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <p class="text-sm">No recent medical check-ups found</p>
                 </div>
             </div>
-            @endforeach
+            @endif
         </div>
     </div>
 </div>

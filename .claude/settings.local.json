@@ -4,7 +4,8 @@
       "Bash(php artisan make:migration:*)",
       "Bash(php artisan make:controller:*)",
       "Bash(php artisan migrate:fresh:*)",
-      "Bash(xargs cat:*)"
+      "Bash(xargs cat:*)",
+      "Bash(php artisan route:list:*)"
     ],
     "deny": [],
     "ask": []

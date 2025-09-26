@@ -6,8 +6,33 @@
     <title>{{ $title ?? 'PT Aino - Medical Check-Up System' }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')
+
+    @if(isset($pdfMode) && $pdfMode)
+    <style>
+        /* Hide navigation and interactive elements for PDF */
+        header, .no-pdf { display: none !important; }
+
+        /* Make layout full width for PDF */
+        body { background: white !important; margin: 0; padding: 20px; font-family: 'Inter', sans-serif; }
+        .max-w-6xl { max-width: none !important; margin: 0 !important; }
+
+        /* Override container styles for PDF */
+        .bg-cream-50 { background-color: white !important; }
+
+        /* Ensure good printing */
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
+        }
+
+        /* Override some interactive elements */
+        button, a[href]:not([href^="mailto"]):not([href^="tel"]) {
+            cursor: default !important;
+            pointer-events: none !important;
+        }
+    </style>
+    @endif
 </head>
 <body class="bg-cream-50 min-h-screen font-sans">
     @guest
@@ -35,14 +60,8 @@
                 <div class="flex items-center space-x-6">
                     <!-- Navigation Links -->
                     <nav class="hidden md:flex space-x-6">
-                        <a href="{{ route('dashboard') }}"
-                           class="text-primary-100 hover:text-neutral-50 px-3 py-2 text-sm font-medium transition-colors duration-200 {{ request()->routeIs('dashboard') ? 'text-neutral-50 border-b-2 border-secondary-300' : '' }}">
-                            Dashboard
-                        </a>
-                        <a href="{{ route('my-health') }}"
-                           class="text-primary-100 hover:text-neutral-50 px-3 py-2 text-sm font-medium transition-colors duration-200 {{ request()->routeIs('my-health') ? 'text-neutral-50 border-b-2 border-secondary-300' : '' }}">
-                            My Health Results
-                        </a>
+                        
+                       
                     </nav>
 
                     <!-- User Profile Dropdown -->
@@ -148,7 +167,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-2xl font-serif font-semibold text-primary-700">
+                    <h2 class="text-2xl font-sans font-semibold text-primary-700">
                         @yield('page-title', 'Dashboard')
                     </h2>
                     <p class="text-sm text-neutral-500 mt-1">

@@ -9,7 +9,7 @@ class LabUrine extends Model
 {
     use HasFactory;
 
-    protected $table = 'lab_urine';
+    protected $table = 'hasil_urine';
 
     protected $fillable = [
         'order_id',
@@ -31,6 +31,7 @@ class LabUrine extends Model
         'kristal_sedimen',
         'silinder_sedimen',
         'lain_lain_sedimen',
+        'kesimpulan_urine',
     ];
 
     public function order()

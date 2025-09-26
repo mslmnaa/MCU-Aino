@@ -9,7 +9,7 @@ class LabHematologi extends Model
 {
     use HasFactory;
 
-    protected $table = 'lab_hematologi';
+    protected $table = 'hasil_hematologi';
 
     protected $fillable = [
         'order_id',
@@ -30,6 +30,7 @@ class LabHematologi extends Model
         'monosit',
         'trombosit',
         'laju_endap_darah',
+        'kesimpulan_hematologi',
     ];
 
     public function order()
