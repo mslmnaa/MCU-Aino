@@ -13,7 +13,17 @@
 - File: `config/excel.php`
 - Removed: `use PhpOffice\PhpSpreadsheet\Reader\Csv;`
 - Changed: `Csv::GUESS_ENCODING` to `'UTF-8'` (line 130)
-- Added: Environment variable support for cache path (line 328)
+- Added: Environment variable support for cache path (line 326)
+
+### 3. Undefined constant Maatwebsite\Excel\Excel::XLSX
+**Solution:** Replaced all Excel class constants with string values
+- File: `config/excel.php`
+- Removed: `use Maatwebsite\Excel\Excel;`
+- Replaced all `Excel::` constants with their string equivalents:
+  - `Excel::XLSX` → `'Xlsx'`
+  - `Excel::CSV` → `'Csv'`
+  - `Excel::DOMPDF` → `'Dompdf'`
+  - etc.
 
 ## Environment Variables for Production
 
@@ -59,6 +69,8 @@ composer dump-autoload --optimize
 
 - ✅ Import MCU functionality works without "Importable" trait error
 - ✅ Excel configuration loads without PhpSpreadsheet class error
+- ✅ Excel constants resolved without class loading issues
+- ✅ Configuration caching works properly (`php artisan config:cache`)
 - ✅ All routes accessible (tested with `php artisan route:list`)
 
 The import functionality remains fully operational after these fixes.
