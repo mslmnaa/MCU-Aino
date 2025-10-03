@@ -38,7 +38,7 @@ EXCEL_CACHE_PATH=/tmp/laravel-excel
 
 ```bash
 # Install dependencies
-composer install --no-dev --optimize-autoloader
+   composer install --no-dev --optimize-autoloader
 
 # Clear and cache configuration
 php artisan config:clear
