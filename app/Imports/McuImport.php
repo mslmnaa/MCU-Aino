@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Illuminate\Support\Collection;
@@ -16,7 +15,7 @@ use Carbon\Carbon;
 
 class McuImport implements ToModel, SkipsOnError
 {
-    use Importable, SkipsErrors;
+    use SkipsErrors;
 
     protected $columnMapping;
     protected $importStats = [

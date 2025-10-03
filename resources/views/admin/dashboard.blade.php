@@ -1,7 +1,5 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Administrator Dashboard')
-@section('page-subtitle', 'Overview of medical check-up system and patient records')
 
 @section('content')
 <!-- Statistics Overview -->

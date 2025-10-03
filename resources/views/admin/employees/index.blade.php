@@ -1,9 +1,6 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Employee Management')
-@section('page-subtitle', 'Manage all patient information and medical check-up records')
 
-@section('content')
 <!-- Header with Action Buttons -->
 <div class="mb-6">
     
