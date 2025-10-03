@@ -1,7 +1,6 @@
 <?php
 
 use Maatwebsite\Excel\Excel;
-use PhpOffice\PhpSpreadsheet\Reader\Csv;
 
 return [
     'exports' => [
@@ -128,7 +127,7 @@ return [
             'enclosure'        => '"',
             'escape_character' => '\\',
             'contiguous'       => false,
-            'input_encoding'   => Csv::GUESS_ENCODING,
+            'input_encoding'   => 'UTF-8',
         ],
 
         /*
@@ -326,7 +325,7 @@ return [
         | and the create file (file).
         |
         */
-        'local_path'          => storage_path('framework/cache/laravel-excel'),
+        'local_path'          => env('EXCEL_CACHE_PATH', storage_path('framework/cache/laravel-excel')),
 
         /*
         |--------------------------------------------------------------------------
