@@ -49,7 +49,12 @@ class PatientController extends Controller
             $comparisonData = $healthAnalysisService->compareHealthData($patient, $availableYears->toArray());
         }
 
-        return view('admin.employees.show', compact('patient', 'availableYears', 'comparisonData'));
+        // Load trend configurations for this patient
+        $trendConfigs = $patient->trendConfigs()->get()->keyBy(function($config) {
+            return $config->parameter_name . '_' . $config->exam_type;
+        });
+
+        return view('admin.employees.show', compact('patient', 'availableYears', 'comparisonData', 'trendConfigs'));
     }
 
     public function showHealthCheck($shareId)
@@ -75,7 +80,12 @@ class PatientController extends Controller
             ]);
         }]);
 
-        return view('user.health-check', compact('patient'));
+        // Load trend configurations for this patient
+        $trendConfigs = $patient->trendConfigs()->get()->keyBy(function($config) {
+            return $config->parameter_name . '_' . $config->exam_type;
+        });
+
+        return view('user.health-check', compact('patient', 'trendConfigs'));
     }
 
     public function myHealth(Request $request)
@@ -130,7 +140,7 @@ class PatientController extends Controller
             $fileName = 'Medical_Checkup_' . str_replace(' ', '_', $patient->name) . '_' . $selectedYears->implode('-') . '_' . date('Y-m-d') . '.pdf';
 
             // Use DomPDF directly for fast PDF generation
-            $pdf = Pdf::loadView('admin.employees.export-pdf', compact('patient', 'selectedYears'));
+            $pdf = Pdf::loadView('admin.patients.export-pdf', compact('patient', 'selectedYears'));
             $pdf->setPaper('A4', 'portrait');
             $pdf->setOptions([
                 'isHtml5ParserEnabled' => true,
@@ -141,7 +151,12 @@ class PatientController extends Controller
             return $pdf->download($fileName);
         }
 
-        return view('user.health-check', compact('patient'));
+        // Load trend configurations for this patient
+        $trendConfigs = $patient->trendConfigs()->get()->keyBy(function($config) {
+            return $config->parameter_name . '_' . $config->exam_type;
+        });
+
+        return view('user.health-check', compact('patient', 'trendConfigs'));
     }
 
     public function export(Patient $patient, Request $request)
@@ -187,7 +202,7 @@ class PatientController extends Controller
         $fileName = 'Medical_Checkup_' . str_replace(' ', '_', $patient->name) . '_' . $selectedYears->implode('-') . '_' . date('Y-m-d') . '.pdf';
 
         // Use DomPDF directly for fast PDF generation
-        $pdf = Pdf::loadView('admin.employees.export-pdf', compact('patient', 'selectedYears'));
+        $pdf = Pdf::loadView('admin.patients.export-pdf', compact('patient', 'selectedYears'));
         $pdf->setPaper('A4', 'portrait');
         $pdf->setOptions([
             'isHtml5ParserEnabled' => true,

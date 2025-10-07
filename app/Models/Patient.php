@@ -71,4 +71,10 @@ class Patient extends Model
             return $order->tgl_order->format('Y');
         });
     }
+
+    // Relationship for trend configurations
+    public function trendConfigs()
+    {
+        return $this->hasMany(PatientTrendConfig::class);
+    }
 }

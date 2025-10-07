@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HealthComparisonController;
+use App\Http\Controllers\TrendConfigController;
 use Illuminate\Support\Facades\Route;
 
 // Authentication routes
@@ -39,6 +40,14 @@ Route::middleware('auth')->group(function () {
         // Normal values management
         Route::get('/admin/normal-values', [App\Http\Controllers\Admin\MedicalRecordController::class, 'normalValues'])->name('admin.normal-values');
         Route::put('/admin/normal-values', [App\Http\Controllers\Admin\MedicalRecordController::class, 'updateNormalValues'])->name('admin.normal-values.update');
+
+        // Trend configuration routes
+        Route::get('/patients/{patient}/trend-config', [TrendConfigController::class, 'index'])->name('trend-config.index');
+        Route::get('/patients/{patient}/trend-config/data', [TrendConfigController::class, 'getConfig'])->name('trend-config.get');
+        Route::post('/patients/{patient}/trend-config', [TrendConfigController::class, 'saveConfig'])->name('trend-config.save');
+        Route::post('/patients/{patient}/trend-config/apply-template', [TrendConfigController::class, 'applyTemplate'])->name('trend-config.apply-template');
+        Route::post('/patients/{patient}/trend-config/copy', [TrendConfigController::class, 'copyFromPatient'])->name('trend-config.copy');
+        Route::get('/trend-config/patients', [TrendConfigController::class, 'getPatients'])->name('trend-config.patients');
 
         // User management routes
         Route::get('/users/create', [App\Http\Controllers\Admin\UserManagementController::class, 'createUser'])->name('users.create');

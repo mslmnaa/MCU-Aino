@@ -4,6 +4,40 @@
 @section('page-subtitle', $patient->name . ' • ID: ' . $patient->share_id)
 
 @section('content')
+<!-- Breadcrumb -->
+<div class="mb-6">
+    <nav class="flex" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{{ route('patients.index') }}" class="inline-flex items-center text-sm font-medium text-neutral-700 hover:text-primary-600">
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                    </svg>
+                    Patients
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <a href="{{ route('patients.show', $patient->id) }}" class="ml-1 text-sm font-medium text-neutral-700 hover:text-primary-600 md:ml-2">
+                        {{ $patient->name }}
+                    </a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="ml-1 text-sm font-medium text-neutral-500 md:ml-2">Medical Records</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+</div>
+
 <div class="mb-6">
     <div class="flex items-center justify-between">
         <div>
@@ -11,7 +45,7 @@
             <p class="text-neutral-600 mt-1">{{ $order->tgl_order->format('d F Y') }} • Lab No: {{ $order->no_lab }} • {{ $order->cabang }}</p>
         </div>
         <a href="{{ route('patients.show', $patient->id) }}"
-           class="bg-neutral-500 hover:bg-neutral-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+           class="bg-neutral-600 hover:bg-neutral-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
             Back to Patient
         </a>
     </div>

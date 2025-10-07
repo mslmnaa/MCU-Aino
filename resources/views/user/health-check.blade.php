@@ -142,10 +142,13 @@
     </div>
 </div>
 
-<!-- Unified Summary & Detail Section -->
-<div class="bg-white rounded-lg shadow-md mb-6" id="unified-section" x-data="{ activeTab: 'detail' }">
-    <div class="border-b border-neutral-200 px-6 py-4" id="unified-header">
+<!-- Rangkuman Section (Always Visible) -->
+<div class="bg-white rounded-lg shadow-md mb-6" id="summary-section" x-data="{ activeTab: 'detail' }">
+    <div class="border-b border-neutral-200 px-6 py-4" id="summary-header">
         <!-- Header will be populated by JavaScript -->
+    </div>
+    <div class="p-6" id="summary-content">
+        <!-- Summary content will be populated by JavaScript -->
     </div>
 
     <!-- Tab Navigation -->
@@ -167,9 +170,9 @@
     </div>
 
     <!-- Tab Content -->
-    <div class="p-6">
+    <div class="p-6" id="tab-content-wrapper" style="display: none;">
         <!-- Detail Hasil Tab Content -->
-        <div x-show="activeTab === 'detail'" id="unified-content">
+        <div x-show="activeTab === 'detail'" id="detail-content">
             <!-- Content will be populated by JavaScript -->
         </div>
 
@@ -538,9 +541,48 @@ const maxYears = 5;
 // Patient orders data for summary
 const patientOrders = @json($patient->orders);
 
+// Trend configurations for this patient
+const trendConfigs = @json($trendConfigs ?? []);
+
+// Normal ranges for parameters (used to determine if value is within normal range)
+const normalRanges = {
+    // Hematologi
+    'hemoglobin': { min: 12, max: 16 },
+    'erytrosit': { min: 4.2, max: 5.4 },
+    'hematokrit': { min: 37, max: 48 },
+    'leukosit': { min: 4000, max: 11000 },
+    'trombosit': { min: 150000, max: 450000 },
+
+    // Profil Lemak
+    'cholesterol': { min: 0, max: 200 },
+    'trigliserida': { min: 0, max: 150 },
+    'hdl_cholesterol': { min: 40, max: 999 }, // higher is better
+    'ldl_cholesterol': { min: 0, max: 100 },
+
+    // Glukosa Darah
+    'glukosa_puasa': { min: 70, max: 100 },
+    'glukosa_2jam_pp': { min: 0, max: 140 },
+    'hba1c': { min: 0, max: 5.7 },
+
+    // Fungsi Hati
+    'sgot': { min: 10, max: 40 },
+    'sgpt': { min: 7, max: 56 },
+
+    // Fungsi Ginjal
+    'ureum': { min: 10, max: 50 },
+    'creatinin': { min: 0.6, max: 1.2 },
+    'asam_urat': { min: 3.5, max: 7.2 },
+
+    // Pemeriksaan Vital
+    'berat_badan': { min: 40, max: 100 },
+    'tinggi_badan': { min: 150, max: 200 },
+    'bmi': { min: 18.5, max: 24.9 },
+};
+
 console.log('Available Years:', @json($availableYears->toArray()));
 console.log('Initial Active Years:', activeYears);
 console.log('Patient Orders:', patientOrders);
+console.log('Trend Configs:', trendConfigs);
 
 function toggleYear(year) {
     const btn = document.querySelector(`[data-year="${year}"]`);
@@ -595,21 +637,26 @@ function updateDisplay() {
         ? '1 year selected'
         : `${activeYears.length} years selected`;
 
-    // Update unified section
-    updateUnifiedSection();
+    // Update summary and detail sections
+    updateSummarySection();
+    updateDetailSection();
 
     // Update trend indicators
     updateTrendIndicators();
 }
 
-function updateUnifiedSection() {
-    const unifiedHeader = document.getElementById('unified-header');
-    const unifiedContent = document.getElementById('unified-content');
+function updateSummarySection() {
+    const summarySection = document.getElementById('summary-section');
+    const summaryHeader = document.getElementById('summary-header');
+    const summaryContent = document.getElementById('summary-content');
+    const tabNavigation = document.getElementById('tab-navigation');
+    const tabContentWrapper = document.getElementById('tab-content-wrapper');
 
     if (activeYears.length === 0) {
-        unifiedHeader.innerHTML = '<h3 class="text-lg font-semibold text-neutral-800">Rangkuman & Detail MCU</h3>';
-        unifiedContent.innerHTML = getEmptyState();
-        hideTabNavigation();
+        summaryHeader.innerHTML = '<h3 class="text-lg font-semibold text-neutral-800">Rangkuman MCU</h3>';
+        summaryContent.innerHTML = getEmptyState();
+        tabNavigation.style.display = 'none';
+        tabContentWrapper.style.display = 'none';
         return;
     }
 
@@ -621,9 +668,10 @@ function updateUnifiedSection() {
     });
 
     if (!orderForYear) {
-        unifiedHeader.innerHTML = '<h3 class="text-lg font-semibold text-neutral-800">Rangkuman & Detail MCU</h3>';
-        unifiedContent.innerHTML = getEmptyState();
-        hideTabNavigation();
+        summaryHeader.innerHTML = '<h3 class="text-lg font-semibold text-neutral-800">Rangkuman MCU</h3>';
+        summaryContent.innerHTML = getEmptyState();
+        tabNavigation.style.display = 'none';
+        tabContentWrapper.style.display = 'none';
         return;
     }
 
@@ -634,17 +682,42 @@ function updateUnifiedSection() {
         year: 'numeric'
     });
 
-    unifiedHeader.innerHTML = `
+    summaryHeader.innerHTML = `
         <div>
-            <h3 class="text-lg font-semibold text-neutral-800">Rangkuman & Detail MCU - ${primaryYear}</h3>
+            <h3 class="text-lg font-semibold text-neutral-800">Rangkuman MCU - ${primaryYear}</h3>
             <p class="text-sm text-neutral-600 mt-1">${orderDate} • Lab No: ${orderForYear.no_lab} • ${orderForYear.cabang || 'Lab Utama'}</p>
         </div>
     `;
 
-    unifiedContent.innerHTML = generateUnifiedHTML(orderForYear);
+    summaryContent.innerHTML = generateSummaryHTML(orderForYear);
 
-    // Show tab navigation and generate charts
-    showTabNavigation();
+    // Show tab navigation and content
+    tabNavigation.style.display = 'block';
+    tabContentWrapper.style.display = 'block';
+}
+
+function updateDetailSection() {
+    const detailContent = document.getElementById('detail-content');
+
+    if (activeYears.length === 0) {
+        return;
+    }
+
+    // Get the first selected year (primary year)
+    const primaryYear = activeYears[0];
+    const orderForYear = patientOrders.find(order => {
+        const orderYear = new Date(order.tgl_order).getFullYear();
+        return orderYear === primaryYear;
+    });
+
+    if (!orderForYear) {
+        return;
+    }
+
+    // Generate detail content (tabel)
+    detailContent.innerHTML = generateDetailHTML(orderForYear);
+
+    // Generate charts
     generateHealthCharts();
 }
 
@@ -661,12 +734,12 @@ function getEmptyState() {
     `;
 }
 
-function generateUnifiedHTML(order) {
+function generateSummaryHTML(order) {
     const labResults = getLabResults(order);
     const nonLabResults = getNonLabResults(order);
 
     let html = `
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Hasil Laboratorium -->
             <div class="bg-neutral-50 rounded-lg p-5 border border-neutral-200">
                 <div class="flex items-center mb-4">
@@ -731,7 +804,13 @@ function generateUnifiedHTML(order) {
                 </div>
             </div>
         </div>
+    `;
 
+    return html;
+}
+
+function generateDetailHTML(order) {
+    let html = `
         <!-- Pemeriksaan Dokter -->
         <div class="bg-neutral-50 rounded-lg p-5 border border-neutral-200 mb-6">
             <div class="flex items-center mb-4">
@@ -910,8 +989,8 @@ function updateTrendIndicators() {
             const colorClass = trend.color === 'red' ? 'text-red-500' : 'text-green-500';
             indicator.innerHTML = `
                 <div class="trend-arrow-up ${colorClass}">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75l3-3m0 0l3 3m-3-3v12.75"></path>
                     </svg>
                 </div>
             `;
@@ -921,8 +1000,8 @@ function updateTrendIndicators() {
             const colorClass = trend.color === 'red' ? 'text-red-500' : 'text-green-500';
             indicator.innerHTML = `
                 <div class="trend-arrow-down ${colorClass}">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11.25l-3-3m0 0l-3 3m3-3v12.75"></path>
                     </svg>
                 </div>
             `;
@@ -1004,39 +1083,54 @@ function calculateTrend(fieldName, examType, sortedYears) {
     const percentChange = ((numNewest - numPrevious) / numPrevious) * 100;
     const tooltip = `${previousYear}: ${previousValue} → ${newestYear}: ${newestValue} (${percentChange > 0 ? '+' : ''}${percentChange.toFixed(1)}%)`;
 
-    // For parameters where higher is generally worse (like cholesterol, blood pressure)
-    const worseWhenHigher = [
-        'cholesterol', 'trigliserida', 'ldl_cholesterol', 'glukosa_puasa', 'glukosa_2jam_pp',
-        'hba1c', 'ureum', 'creatinin', 'asam_urat', 'sgot', 'sgpt', 'berat_badan', 'bmi'
-    ];
+    // ==========================================
+    // NEW LOGIC: Check if values are within normal range
+    // ==========================================
 
-    // For parameters where lower is generally worse (like hemoglobin, HDL)
-    const worseWhenLower = [
-        'hemoglobin', 'hdl_cholesterol', 'tinggi_badan'
-    ];
+    const normalRange = normalRanges[fieldName];
 
-    if (worseWhenHigher.includes(fieldName)) {
-        // Red for increase (bad), Green for decrease (good)
+    // Helper function to check if value is within normal range
+    function isWithinNormalRange(value, range) {
+        if (!range) return null; // No range defined
+        return value >= range.min && value <= range.max;
+    }
+
+    const newestIsNormal = normalRange ? isWithinNormalRange(numNewest, normalRange) : null;
+    const previousIsNormal = normalRange ? isWithinNormalRange(numPrevious, normalRange) : null;
+
+    // CASE 1: Both values are within normal range → ALWAYS GREEN
+    if (newestIsNormal && previousIsNormal) {
         return {
             direction: percentChange > 0 ? 'up' : 'down',
-            color: percentChange > 0 ? 'red' : 'green',
-            tooltip: tooltip + (percentChange > 0 ? ' ⚠️ Meningkat' : ' ✅ Menurun')
-        };
-    } else if (worseWhenLower.includes(fieldName)) {
-        // Green for increase (good), Red for decrease (bad)
-        return {
-            direction: percentChange > 0 ? 'up' : 'down',
-            color: percentChange > 0 ? 'green' : 'red',
-            tooltip: tooltip + (percentChange > 0 ? ' ✅ Meningkat' : ' ⚠️ Menurun')
-        };
-    } else {
-        // For neutral parameters, use green/red based on direction
-        return {
-            direction: percentChange > 0 ? 'up' : 'down',
-            color: percentChange > 0 ? 'green' : 'red',
-            tooltip: tooltip
+            color: 'green',
+            tooltip: tooltip + ' ✅ Masih dalam rentang normal'
         };
     }
+
+    // CASE 2: At least one value is outside normal range
+    // Check if we have custom config for this parameter
+    const configKey = `${fieldName}_${examType}`;
+    const patientConfig = trendConfigs[configKey];
+
+    // Determine which color to use based on patient config or default (red)
+    let trendColor = 'red'; // Default to red if outside normal
+
+    if (patientConfig) {
+        // We have patient-specific configuration
+        if (numNewest > normalRange.max) {
+            // Value is ABOVE normal range
+            trendColor = patientConfig.trend_above_normal;
+        } else if (numNewest < normalRange.min) {
+            // Value is BELOW normal range
+            trendColor = patientConfig.trend_below_normal;
+        }
+    }
+
+    return {
+        direction: percentChange > 0 ? 'up' : 'down',
+        color: trendColor,
+        tooltip: tooltip + (trendColor === 'red' ? ' ⚠️ Di luar rentang normal' : ' ⚠️ Di luar normal (dikonfigurasi hijau)')
+    };
 }
 
 function getFieldValue(order, examType, fieldName) {
@@ -1153,20 +1247,6 @@ document.getElementById('photoModal').addEventListener('click', function(e) {
 
 // Chart management
 let healthCharts = {};
-
-function showTabNavigation() {
-    const tabNav = document.getElementById('tab-navigation');
-    if (tabNav) {
-        tabNav.style.display = 'block';
-    }
-}
-
-function hideTabNavigation() {
-    const tabNav = document.getElementById('tab-navigation');
-    if (tabNav) {
-        tabNav.style.display = 'none';
-    }
-}
 
 function generateHealthCharts() {
     const chartsContainer = document.getElementById('charts-container');

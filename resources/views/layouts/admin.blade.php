@@ -268,31 +268,15 @@
                   'ml-16': !sidebarOpen && window.innerWidth >= 768,
                   'ml-0': window.innerWidth < 768
               }">
-            <!-- Page Header -->
-            <header class="bg-neutral-50 border-b border-cream-200 px-4 md:px-8 py-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <!-- Mobile Menu Button -->
-                        <button @click="sidebarOpen = !sidebarOpen"
-                                class="md:hidden mr-4 text-primary-600 hover:text-primary-700 p-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
-                        <div>
-                            <h2 class="text-2xl font-sans font-semibold text-primary-700">
-                                @yield('page-title', 'Dashboard')
-                            </h2>
-                            <p class="text-sm mt-1 font-semibold" style="color: #000000 !important; font-weight: 600 !important;">
-                                @yield('page-subtitle', 'PT Aino Medical Check-Up Management System')
-                            </p>
-                        </div>
-                    </div>
-                    <div class="text-sm text-neutral-500">
-                        {{ now()->format('l, F j, Y') }}
-                    </div>
-                </div>
-            </header>
+            <!-- Mobile Menu Button (Floating) -->
+            <div class="md:hidden fixed top-4 left-4 z-30">
+                <button @click="sidebarOpen = !sidebarOpen"
+                        class="text-primary-600 hover:text-primary-700 bg-white rounded-lg p-2 shadow-md">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
 
             <!-- Page Content -->
             <div class="px-8 py-6">
