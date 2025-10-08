@@ -8,7 +8,7 @@
 @if(isset($pdfMode) && $pdfMode)
 <div class="text-center mb-8 border-b pb-4">
     <h1 class="text-3xl font-bold text-primary-700 mb-2">RANGKUMAN HASIL PEMERIKSAAN MEDICAL CHECK-UP</h1>
-    <h2 class="text-xl text-primary-600 mb-4">APT AINO INDONESIA</h2>
+    <h2 class="text-xl text-primary-600 mb-4">PT AINO INDONESIA</h2>
 
     <div class="grid grid-cols-2 gap-8 mt-6 text-left max-w-md mx-auto">
         <div>

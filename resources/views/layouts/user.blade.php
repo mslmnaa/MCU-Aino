@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'PT Aino - Medical Check-Up System' }}</title>
+    <title>{{ $title ?? 'Aino - Medical Check-Up System' }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -51,7 +51,7 @@
                 <div class="flex items-center">
                     <x-logo variant="light" size="sm" :showText="false" />
                     <div class="ml-3">
-                        <h1 class="text-xl font-serif font-bold text-neutral-50">PT Aino</h1>
+                        <h1 class="text-xl font-serif font-bold text-neutral-50">   Aino</h1>
                         <p class="text-primary-100 text-sm hidden sm:block">Medical Check-Up System</p>
                     </div>
                 </div>

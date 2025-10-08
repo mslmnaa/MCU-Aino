@@ -32,7 +32,7 @@
     <!-- Success/Error Messages -->
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-            {{ session('success') }}
+            {!! session('success') !!}
         </div>
     @endif
 

@@ -190,19 +190,34 @@ class ImportController extends Controller
             \Log::info('Import completed', ['detailed_stats' => $detailedStats, 'credentials_file' => $credentialsFile]);
 
             // Build detailed success message
-            $message = "Import berhasil! ";
-            $message .= "{$detailedStats['total_processed']} data diproses, ";
-            $message .= "{$detailedStats['success']} berhasil, ";
-            $message .= "{$detailedStats['errors']} error.<br><br>";
+            $message = "<div class='space-y-3'>";
+            $message .= "<div class='font-semibold text-lg'>Import Data Berhasil!</div>";
+            $message .= "<div class='text-sm text-gray-700'>";
+            $message .= "Total {$detailedStats['total_processed']} data diproses: ";
+            $message .= "<span class='text-green-600 font-medium'>{$detailedStats['success']} berhasil</span>";
+            if ($detailedStats['errors'] > 0) {
+                $message .= ", <span class='text-red-600 font-medium'>{$detailedStats['errors']} error</span>";
+            }
+            $message .= "</div>";
 
             // Add breakdown of new vs existing
-            $message .= "<strong>📊 Detail Import:</strong><br>";
-            $message .= "• {$detailedStats['new_accounts_created']} akun baru dibuat<br>";
-            $message .= "• {$detailedStats['existing_accounts_updated']} akun existing (data diupdate)<br>";
+            $message .= "<div class='mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3'>";
+            $message .= "<div class='font-medium text-blue-900 mb-2'>Detail Import:</div>";
+            $message .= "<ul class='text-sm text-blue-800 space-y-1'>";
+            $message .= "<li>• {$detailedStats['new_accounts_created']} akun baru dibuat</li>";
+            $message .= "<li>• {$detailedStats['existing_accounts_updated']} akun existing diupdate</li>";
+            $message .= "</ul>";
+            $message .= "</div>";
 
             if ($credentialsFile) {
-                $message .= "<br><strong>📋 Credentials File:</strong> <a href='" . asset('storage/' . $credentialsFile) . "' target='_blank' class='text-primary-600 underline'>Download Patient Credentials</a>";
+                $message .= "<div class='mt-3 bg-green-50 border border-green-200 rounded-lg p-3'>";
+                $message .= "<div class='font-medium text-green-900 mb-2'>File Credentials:</div>";
+                $message .= "<a href='" . asset('storage/' . $credentialsFile) . "' target='_blank' class='inline-flex items-center text-sm text-green-700 hover:text-green-900 font-medium underline'>";
+                $message .= "Download Patient Credentials";
+                $message .= "</a>";
+                $message .= "</div>";
             }
+            $message .= "</div>";
 
             return redirect()->route('admin.import')->with('success', $message);
 

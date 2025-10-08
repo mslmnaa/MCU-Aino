@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Aino Medical System</title>
     @vite('resources/css/app.css')
-</head>
+</head> 
 <body class="bg-gradient-to-br from-primary-50 to-secondary-50 min-h-screen flex items-center justify-center">
     <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
         <div class="text-center mb-8">
