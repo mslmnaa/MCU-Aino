@@ -51,7 +51,7 @@
                 <div class="flex items-center">
                     <x-logo variant="light" size="sm" :showText="false" />
                     <div class="ml-3">
-                        <h1 class="text-xl font-serif font-bold text-neutral-50">   Aino</h1>
+                        <h1 class="text-xl font-serif font-bold text-neutral-50">Aino</h1>
                         <p class="text-primary-100 text-sm hidden sm:block">Medical Check-Up System</p>
                     </div>
                 </div>
